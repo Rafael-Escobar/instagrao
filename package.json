@@ -1,0 +1,9 @@
+{
+  "name": "intagrao",
+  "dependencies": {
+    "aws-sdk": "^2.948.0",
+    "crypto": "^1.0.1",
+    "image-size": "^1.0.0",
+    "tempfile": "^4.0.0"
+  }
+}
