@@ -12,30 +12,30 @@ DynamoDB.
 
 Função que recebe a requisição de um endpoint criado pelo AWS API Gateway.
 Ela irá receber o parâmetro s3objectkey e retornar os metadados armazenados no DynamoDB.
-Método: Get
-Parâmetros de entrada: s3objectkey
-Retorno da chamada da API: 
-    - 404 caso não encontre a image
-    - 200 e metadados da imagem consultada
+<br>Método: Get
+<br>Parâmetros de entrada: s3objectkey
+<br>Retorno da chamada da API: 
+- 404 caso não encontre a image
+- 200 e metadados da imagem consultada
 
 ### GetImage
 Função que recebe como parâmetro o s3objectkey e faz o download da imagem.
-Método: Get
-Parâmetros de entrada: s3objectkey
-Retorno da chamada da API: 
+<br>Método: Get
+<br>Parâmetros de entrada: s3objectkey
+<br>Retorno da chamada da API: 
     - 404 caso não encontre a image
     - 200 e a imagem, caso encontre
 
 ### InfoImages
 Função que não recebe nenhum parâmetro e pesquisa os metadados salvos no
 DynamoDB para retornar as seguintes informações:
--- Qual é a imagem que contém o maior tamanho?
--- Qual é a imagem que contém o menor tamanho?
--- Quais os tipos de imagem salvas no S3?
--- Qual a quantidade de cada tipo de imagem salva?
-Método: Get
-Parâmetros de entrada: Não há parâmetros
-Retorno da chamada da API:
+- Qual é a imagem que contém o maior tamanho?
+- Qual é a imagem que contém o menor tamanho?
+- Quais os tipos de imagem salvas no S3?
+- Qual a quantidade de cada tipo de imagem salva?
+<br>Método: Get
+<br>Parâmetros de entrada: Não há parâmetros
+<br>Retorno da chamada da API:
 ```json
 {
     "smaller": {
