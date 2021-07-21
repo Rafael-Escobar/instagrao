@@ -26,9 +26,10 @@ DynamoDB para retornar as seguintes informações:
 
 ## Como utilizar
 
-* Requisitos:
-** Possuir uma conta aws
-** Ter Node.Js instalado
+* Requisitos iniciais:
+    * Possuir uma conta aws
+    * Gerar chave de acesso (Key e Secret)
+    * Instalar Node.js
 
 ### Passos
 
