@@ -32,7 +32,7 @@ functions:
     timeout: 30
     events:
       - s3:
-          bucket: instagrao
+          bucket: ${opt:bucket}
           event: s3:ObjectCreated:*
           rules:
             - prefix: uploads/
