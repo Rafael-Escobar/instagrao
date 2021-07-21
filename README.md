@@ -1,6 +1,6 @@
 # Instagrão - Serverless Challenge
 
-O objetivo deste projeto é realizar uma POC (prova de conceito), utilizando Serverless, AWS e NodeJs. Neste projeto inicialmente foram defindas quatro funções a serem implementadas, no status atual do projeto a função InfoImages não encontra-se implementada.
+O objetivo deste projeto é realizar uma POC (prova de conceito), utilizando Serverless, AWS e NodeJs. Neste projeto inicialmente foram defindas quatro funções a serem implementadas, sendo elas:
 
 ### ExtractMetadata
  
