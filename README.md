@@ -33,7 +33,7 @@ DynamoDB para retornar as seguintes informações:
 - Qual é a imagem que contém o menor tamanho?
 - Quais os tipos de imagem salvas no S3?
 - Qual a quantidade de cada tipo de imagem salva?
-<br>
+
 <br>Método: Get
 <br>Parâmetros de entrada: Não há parâmetros
 <br>Retorno da chamada da API:
