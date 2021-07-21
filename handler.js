@@ -2,6 +2,7 @@
 
 const AWS = require('aws-sdk'); 
 const S3 = new AWS.S3();
+AWS.config.update({ region: "us-east-1" });
 const dynamoDb = new AWS.DynamoDB.DocumentClient();
 const sizeOf = require('image-size')
 const fs = require('fs');
@@ -15,10 +16,9 @@ module.exports.extractMetadata = async (event, context, callback) => {
   var bucket = event['Records'][0]['s3']['bucket']['name']
   var key = event['Records'][0]['s3']['object']['key']
   var size = event['Records'][0]['s3']['object']['size']
-  var extension = key.split(".").slice(-1)[0]
   var params = { Bucket: bucket, Key: key };
   var hash = crypto.createHash('md5').update(key).digest('hex');
-  const response = {
+  var response = {
     statusCode: 200,
     body: JSON.stringify({
       s3objectkey: hash,
@@ -54,7 +54,7 @@ module.exports.extractMetadata = async (event, context, callback) => {
 
 module.exports.getMetadata = async (event, context, callback) => {
   const key = event["pathParameters"]["s3objectkey"]
-  const response ={
+  var response ={
     statusCode: 200,
     body: JSON.stringify({
       Message: "getMetadata"
@@ -93,7 +93,7 @@ module.exports.getMetadata = async (event, context, callback) => {
 
 module.exports.getImage = async (event, context,callback) => {
   const key = event["pathParameters"]["s3objectkey"]
-  const response = {
+  var response = {
     statusCode: 404,
     headers:{}
   }
@@ -132,40 +132,62 @@ module.exports.getImage = async (event, context,callback) => {
     callback(null, response)
   }
 };
+function metadataReport(data){
+  var litle = { size: data[0].size, key: data[0].s3objectkey}
+  var bigger = { size: data[0].size, key: data[0].s3objectkey}
+  var amount = {}
 
+}
 module.exports.getInfoImage = async (event, context, callback) => {
-  const response = {
-    statusCode: 501,
+  var response ={
+    statusCode: 200,
+    body: JSON.stringify({
+      Message: "getInfoImage"
+    })
   }
-  callback(null, response)
-  
-  // const response ={
-  //   statusCode: 200,
-  //   body: JSON.stringify({
-  //     Message: "getInfoImage"
-  //   })
-  // }
-  // try {
-  //   var params = { 
-  //     TableName: table_name, 
-  //     KeyConditionExpression:'size > :size',
-  //     ExpressionAttributeValues: {":size":0},
-  //   }
-  //   dynamoDb.query(params, function (err, data) {
-  //     if (err) {
-  //       console.log(err);
-  //       response.statusCode = 204
-  //       response.body = JSON.stringify({ message: "file not found" })
-  //     } else {
-  //       console.log(data);
-  //       response.statusCode = 200
-  //       response.body = data
-  //     }
-  //   });
-  // } catch (err) {
-  //   console.log(err);
-  //   response.statusCode = 400
-  // } finally {
-  //   callback(null, response)
-  // }
+  try {
+    var params = { 
+      TableName: table_name, 
+    }
+    dynamoDb.scan(params, function (err, data) {
+      if (err) {
+        console.log(err);
+        response.statusCode = 200
+        response.body = JSON.stringify({ Message: err })
+        response.headers = {
+          'Erro': "erro"
+        }
+      } else {
+        console.log(data);
+        response.statusCode = 200
+        var report = {
+          smaller: { size: data.Items[0]["size"], s3objectkey: data.Items[0]["s3objectkey"] },
+          bigger: { size: data.Items[0]["size"], s3objectkey: data.Items[0]["s3objectkey"] },
+          amount: {}
+        }
+        data.Items.forEach((item) => {
+          if (item["size"] < report.smaller["size"]) {
+            report.smaller["size"] = item["size"]
+            report.smaller["s3objectkey"] = item["s3objectkey"]
+          }
+          if (item["size"] > report.bigger["size"]) {
+            report.bigger["size"] = item["size"]
+            report.bigger["s3objectkey"] = item["s3objectkey"]
+          }
+          if (item["extension"] in report["amount"]) {
+            report["amount"][item["extension"]] += 1
+          } else {
+            report["amount"][item["extension"]] = 1
+          }
+        });
+        report["extension"] = Object.keys(report["amount"])
+        response.body = JSON.stringify(report)
+      }
+    });
+  } catch (err) {
+    console.log(err);
+    response.statusCode = 400
+  } finally {
+    callback(null, response)
+  }
 }
